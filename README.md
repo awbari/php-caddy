@@ -1,6 +1,6 @@
-# PHP for Kirby CMS
+# PHP & Caddy
 
-A php-fpm container for kirby cms with caddy as web server.
+A php-fpm container with caddy as web server.
 
 ## Build
 
@@ -9,6 +9,8 @@ docker build --build-arg VERSION=8.3 -t php-caddy .
 ```
 
 ## Usage
+
+Entrypoint is `/app/public/index.php`
 
 ```yml
 services:
