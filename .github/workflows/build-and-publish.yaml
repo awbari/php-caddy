@@ -36,9 +36,9 @@ jobs:
           context: .
           push: true
           tags: > 
-            ghcr.io/primalebenundstereo/kirby:latest,
-            ghcr.io/primalebenundstereo/kirby:${{ env.PHP_MAJOR }}.${{ env.PHP_MINOR }},
-            ghcr.io/primalebenundstereo/kirby:${{ env.PHP_MAJOR }}
+            ghcr.io/awbari/php-caddy:latest,
+            ghcr.io/awbari/php-caddy:${{ env.PHP_MAJOR }}.${{ env.PHP_MINOR }},
+            ghcr.io/awbari/php-caddy:${{ env.PHP_MAJOR }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
