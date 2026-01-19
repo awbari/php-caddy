@@ -37,9 +37,9 @@ jobs:
           push: true
           tags: > 
             ghcr.io/primalebenundstereo/kirby:latest,
-            ghcr.io/primalebenundstereo/kirby:$PHP_MAJOR.$PHP_MINOR,
-            ghcr.io/primalebenundstereo/kirby:$PHP_MAJOR
+            ghcr.io/primalebenundstereo/kirby:${{ env.PHP_MAJOR }}.${{ env.PHP_MINOR }},
+            ghcr.io/primalebenundstereo/kirby:${{ env.PHP_MAJOR }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            VERSION=$PHP_MAJOR.$PHP_MINOR
+            VERSION=${{ env.PHP_MAJOR }}.${{ env.PHP_MINOR }}
