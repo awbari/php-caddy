@@ -1,4 +1,4 @@
-ARG VERSION
+ARG VERSION=8.3
 FROM php:$VERSION-fpm-alpine
 
 RUN apk add --update --no-cache \
