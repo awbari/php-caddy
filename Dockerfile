@@ -1,4 +1,5 @@
-FROM php:8.3-fpm-alpine
+ARG VERSION
+FROM php:$VERSION-fpm-alpine
 
 RUN apk add --update --no-cache \
 	openssh-client \

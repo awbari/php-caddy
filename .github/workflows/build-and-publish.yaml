@@ -10,6 +10,10 @@ permissions:
   contents: write
   packages: write
 
+env: 
+  PHP_MAJOR: 8
+  PHP_MINOR: 3
+
 jobs:
   build_publish:
     name: Build and publish docker image
@@ -31,6 +35,11 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/primalebenundstereo/kirby:latest
+          tags: > 
+            ghcr.io/primalebenundstereo/kirby:latest,
+            ghcr.io/primalebenundstereo/kirby:$PHP_MAJOR.$PHP_MINOR,
+            ghcr.io/primalebenundstereo/kirby:$PHP_MAJOR
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=$PHP_MAJOR.$PHP_MINOR
