@@ -1,0 +1,12 @@
+{
+	supervisor {
+		php-fpm
+	}
+}
+
+http://:1337
+
+php_fastcgi 127.0.0.1:9000
+file_server
+encode zstd gzip
+root * /app/public
