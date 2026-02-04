@@ -11,11 +11,8 @@ file_server
 encode zstd gzip
 root * /app/public
 
-# disable http caching for js and css assets
-@static {
+# force revalidation for css and js assets
+@assets {
 	path *.css *.js
 }
-
-header @static {
-	Cache-Control "no-cache, no-store, must-revalidate"
-}
+header @assets Cache-Control "public, max-age=0, must-revalidate"
