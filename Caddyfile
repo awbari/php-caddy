@@ -10,9 +10,3 @@ php_fastcgi 127.0.0.1:9000
 file_server
 encode zstd gzip
 root * /app/public
-
-# force revalidation for css and js assets
-@assets {
-	path *.css *.js
-}
-header @assets Cache-Control "public, max-age=0, must-revalidate"
