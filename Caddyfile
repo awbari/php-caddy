@@ -10,3 +10,12 @@ php_fastcgi 127.0.0.1:9000
 file_server
 encode zstd gzip
 root * /app/public
+
+# disable http caching for js and css assets
+@static {
+	path *.css *.js
+}
+
+header @static {
+	Cache-Control "no-cache, no-store, must-revalidate"
+}
