@@ -1,19 +1,24 @@
 ARG VERSION=8.3
 FROM php:$VERSION-fpm-alpine
 
-RUN apk add --update --no-cache \
-	openssh-client \
-	freetype-dev \
-	libwebp-dev \
-	libzip-dev \
-	zlib \
-	git \
-	sqlite \
-	libjpeg-turbo-dev \
-	bash \
-	libpng-dev \
-  && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-  && docker-php-ext-install -j$(nproc) gd exif zip
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS && \
+		apk add --update --no-cache \
+			openssh-client \
+			freetype-dev \
+			libwebp-dev \
+			libzip-dev \
+			zlib \
+			git \
+			sqlite \
+			libjpeg-turbo-dev \
+			bash \
+			libpng-dev \
+			icu-dev \
+			tidyhtml-dev \
+			&& \ 
+		docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
+		docker-php-ext-install -j$(nproc) gd exif zip tidy intl && \
+		apk del .build-deps
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
