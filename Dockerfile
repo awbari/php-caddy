@@ -1,7 +1,7 @@
 ARG VERSION=8.3
 FROM php:$VERSION-fpm-alpine
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS imagemagick-dev && \
 		apk add --update --no-cache \
 			openssh-client \
 			freetype-dev \
@@ -14,10 +14,13 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS && \
 			bash \
 			libpng-dev \
 			icu-dev \
+			imagemagick \
 			tidyhtml-dev \
 			&& \ 
 		docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
 		docker-php-ext-install -j$(nproc) gd exif zip tidy intl && \
+		pecl install imagick && \
+		docker-php-ext-enable imagick && \
 		apk del .build-deps
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
