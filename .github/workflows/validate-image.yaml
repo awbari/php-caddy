@@ -1,0 +1,51 @@
+name: Validate image
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-smoke:
+    name: Build and smoke test docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build image without publishing
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          pull: true
+          tags: php-caddy:smoke
+          build-args: |
+            VERSION=8.3.36
+
+      - name: Smoke test runtime
+        run: |
+          docker run --rm php-caddy:smoke php -v
+          docker run --rm php-caddy:smoke php-fpm -tt
+          docker run --rm php-caddy:smoke php -r '
+            if (PHP_MAJOR_VERSION !== 8 || PHP_MINOR_VERSION !== 3 || PHP_VERSION_ID < 80336) {
+              fwrite(STDERR, "Unexpected PHP version: " . PHP_VERSION . PHP_EOL);
+              exit(1);
+            }
+            if (ini_get("session.upload_progress.enabled") !== "" && ini_get("session.upload_progress.enabled") !== "0") {
+              fwrite(STDERR, "session.upload_progress.enabled is not disabled" . PHP_EOL);
+              exit(1);
+            }
+            foreach (["gd", "exif", "zip", "tidy", "intl", "imagick"] as $extension) {
+              if (!extension_loaded($extension)) {
+                fwrite(STDERR, "Missing extension: " . $extension . PHP_EOL);
+                exit(1);
+              }
+            }
+          '
+          docker run --rm --entrypoint sh php-caddy:smoke -c 'test "$(id -u)" -eq 1000'

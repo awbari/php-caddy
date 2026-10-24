@@ -11,8 +11,7 @@ permissions:
   packages: write
 
 env: 
-  PHP_MAJOR: 8
-  PHP_MINOR: 3
+  PHP_VERSION: 8.3.36
 
 jobs:
   build_publish:
@@ -37,9 +36,11 @@ jobs:
           push: true
           tags: > 
             ghcr.io/awbari/php-caddy:latest,
-            ghcr.io/awbari/php-caddy:${{ env.PHP_MAJOR }}.${{ env.PHP_MINOR }},
-            ghcr.io/awbari/php-caddy:${{ env.PHP_MAJOR }}
+            ghcr.io/awbari/php-caddy:${{ env.PHP_VERSION }},
+            ghcr.io/awbari/php-caddy:8.3,
+            ghcr.io/awbari/php-caddy:8
+          pull: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            VERSION=${{ env.PHP_MAJOR }}.${{ env.PHP_MINOR }}
+            VERSION=${{ env.PHP_VERSION }}

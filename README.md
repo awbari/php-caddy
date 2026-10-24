@@ -5,7 +5,7 @@ A php-fpm container with caddy as web server.
 ## Build
 
 ```sh
-docker build --build-arg VERSION=8.3 -t php-caddy . 
+docker build -t php-caddy .
 ```
 
 ## Usage

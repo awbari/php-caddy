@@ -1,5 +1,7 @@
-ARG VERSION=8.3
+ARG VERSION=8.3.36
 FROM php:$VERSION-fpm-alpine
+
+RUN php -r 'if (PHP_MAJOR_VERSION !== 8 || PHP_MINOR_VERSION !== 3 || PHP_VERSION_ID < 80336) { fwrite(STDERR, "Expected PHP 8.3.36 or newer, got " . PHP_VERSION . PHP_EOL); exit(1); }'
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS imagemagick-dev && \
 		apk add --update --no-cache \
@@ -16,7 +18,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS imagemagick-dev && \
 			icu-dev \
 			imagemagick \
 			tidyhtml-dev \
-			&& \ 
+			&& \
 		docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
 		docker-php-ext-install -j$(nproc) gd exif zip tidy intl && \
 		pecl install imagick && \
@@ -31,7 +33,7 @@ RUN curl --output /usr/local/bin/caddy "https://caddyserver.com/api/download?os=
 COPY ./php.ini /usr/local/etc/php/conf.d/settings.ini
 COPY ./Caddyfile /etc/Caddyfile
 
-RUN addgroup app \ 
+RUN addgroup app \
 	&& adduser -S -u 1000 -s /bin/bash app -G app \
 	&& mkdir -p /app && chown app:app -R /app
 
